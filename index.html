@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ug">
+<html lang="ug" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +32,8 @@
             background-color: #f5f7fa;
             color: var(--dark-color);
             overflow-x: hidden;
+            direction: rtl;
+            text-align: right;
         }
         
         .navbar {
@@ -47,11 +49,13 @@
         }
         
         .navbar-brand i {
-            margin-right: 10px;
+            margin-left: 10px;
+            margin-right: 0;
         }
         
         .nav-item {
-            margin-left: 15px;
+            margin-left: 0;
+            margin-right: 15px;
         }
         
         .hero-section {
@@ -71,19 +75,20 @@
             font-size: 1.2rem;
             margin-bottom: 30px;
             max-width: 700px;
-            margin-left: auto;
             margin-right: auto;
+            margin-left: auto;
         }
         
         .search-box {
             max-width: 600px;
             margin: 0 auto;
             position: relative;
+            direction: rtl;
         }
         
         .search-input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 15px 50px 15px 20px;
             border-radius: 50px;
             border: none;
             font-size: 1rem;
@@ -92,7 +97,7 @@
         
         .search-btn {
             position: absolute;
-            right: 5px;
+            left: 5px;
             top: 5px;
             width: 40px;
             height: 40px;
@@ -115,7 +120,7 @@
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
+            right: 0;
             width: 80px;
             height: 4px;
             background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
@@ -127,6 +132,7 @@
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
+            justify-content: flex-end;
         }
         
         .sort-btn {
@@ -149,6 +155,7 @@
             gap: 10px;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            justify-content: flex-end;
         }
         
         .category-btn {
@@ -174,6 +181,7 @@
             transition: all 0.3s;
             margin-bottom: 30px;
             height: 100%;
+            text-align: right;
         }
         
         .app-card:hover {
@@ -209,6 +217,7 @@
             margin-bottom: 15px;
             font-size: 0.8rem;
             color: #888;
+            direction: ltr;
         }
         
         .download-btn {
@@ -337,7 +346,7 @@
             content: '';
             position: absolute;
             bottom: 0;
-            right: 0;
+            left: 0;
             width: 40px;
             height: 2px;
             background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
@@ -374,8 +383,8 @@
         
         .admin-link {
             position: fixed;
+            left: 30px;
             bottom: 30px;
-            right: 30px;
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -395,6 +404,54 @@
             color: white;
         }
         
+        /* 反馈按钮样式 */
+        .feedback-btn {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            z-index: 1000;
+        }
+        .feedback-btn button {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 通知样式 */
+        .notification-container {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 1050;
+            max-width: 350px;
+        }
+        .notification-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 15px;
+            position: relative;
+            border-left: 5px solid var(--primary-color);
+        }
+        .notification-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #999;
+        }
+        .notification-content h5 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .notification-content p {
+            margin-bottom: 10px;
+        }
+        
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 1.8rem;
@@ -411,16 +468,35 @@
             .feature-section, .request-app-section {
                 padding: 50px 0;
             }
+            
+            .sort-options, .category-filter {
+                justify-content: center;
+            }
+            
+            .navbar-brand i {
+                margin-left: 0;
+                margin-right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 更新通知 -->
+    <div id="updateNotification" class="notification-container" style="display: none;">
+        <div class="notification-content">
+            <button id="closeNotification" class="notification-close">&times;</button>
+            <h5><i class="fas fa-bell"></i> يېڭىلانما</h5>
+            <p id="notificationMessage">يېڭى قوللىنىش قوشۇلدى: <span id="updatedAppName"></span></p>
+            <a href="#" id="notificationLink" class="btn btn-sm btn-primary">كۆرۈش</a>
+        </div>
+    </div>
+
     <!-- تور بەت باشلىقى -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-mobile-alt"></i>
-                ئۇيغۇرچە ئەپ مەركىزى ALFDroid 
+                ALFDroidئۇيغۇرچە ئەپ مەركىزى   
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -575,7 +651,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <div class="footer-logo">
-                        <i class="fas fa-mobile-alt me-2"></i> ئۇيغۇرچە ئەپ مەركىزى ALFDroid
+                        <i class="fas fa-mobile-alt me-2"></i> ALFDroidئۇيغۇرچە ئەپ مەركىزى
                     </div>
                     <p class="footer-about">
                         بىز ئاندرويىد ئىشلەتكۈچىلەر ئۈچۈن ئەڭ ياخشى ئەپلەرنى تاللايمىز ۋە تەمىنلىۋاتىمىز. بىز بىلەن بىللە بولۇڭ
@@ -619,7 +695,7 @@
                         <h5>ئالاقە</h5>
                         <ul>
                             <li><i class="fas fa-map-marker-alt me-2"></i>يەر شارى</li>
-                            <li><i class="fas fa-phone me-2"></i> +963992199321</li>
+                            <li><i class="fas fa-phone me-2"></i></li>
                             <li><i class="fas fa-envelope me-2"></i> alftermux@gmail.com</li>
                         </ul>
                     </div>
@@ -637,12 +713,54 @@
         <i class="fas fa-cog"></i>
     </a>
 
+    <!-- 反馈按钮和模态框 -->
+    <div class="feedback-btn">
+        <button class="btn btn-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+            <i class="fas fa-comment"></i>
+        </button>
+    </div>
+
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-comment me-2"></i>ئىنكاس قويۇش</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="feedbackForm">
+                        <div class="mb-3">
+                            <label for="feedbackType" class="form-label">ئىنكاس تۈرى</label>
+                            <select class="form-control" id="feedbackType" required>
+                                <option value="suggestion">تەكلىپ</option>
+                                <option value="bug">قاتالىق</option>
+                                <option value="compliment">ماختاش</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedbackContent" class="form-label">مەزمۇن</label>
+                            <textarea class="form-control" id="feedbackContent" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userContact" class="form-label">ئالاقىلىشىش ئۇسۇلى (تاللىما)</label>
+                            <input type="text" class="form-control" id="userContact" placeholder="ئېلخەت ياكى تېلېفون نومۇرى">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane me-1"></i> يوللاش
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
         // JSONBin.io 配置
         const BIN_ID = '6897dc5cd0ea881f40557da9';
         const API_KEY = '$2a$10$aZoog41K.5ljKLOWAbfYe.Ru0R87WRF9PehL9dZor9yuGqKltweby';
+        const FEEDBACK_BIN_ID = '[YOUR_FEEDBACK_BIN_ID]'; // 创建新的bin用于存储反馈
         
         let apps = [];
         let currentSort = 'rating';
@@ -708,7 +826,7 @@
             
             container.innerHTML = sortedApps.map(app => `
                 <div class="col-md-4">
-                    <div class="app-card animate__animated animate__fadeInUp">
+                    <div class="app-card animate__animated animate__fadeInUp" id="app-${app.id}">
                         <img src="${app.imageUrl}" class="app-image" alt="${app.name}">
                         <div class="app-body">
                             <h3 class="app-title">${app.name}</h3>
@@ -772,6 +890,61 @@
             }
         }
         
+        // 检查应用更新
+        async function checkForUpdates() {
+            try {
+                const lastCheck = localStorage.getItem('lastUpdateCheck') || 0;
+                const now = new Date().getTime();
+                
+                // 每6小时检查一次更新
+                if (now - lastCheck > 6 * 60 * 60 * 1000) {
+                    const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                        headers: { 'X-Access-Key': API_KEY }
+                    });
+                    const data = await response.json();
+                    const remoteApps = data.record || [];
+                    
+                    const localApps = JSON.parse(localStorage.getItem('apps')) || [];
+                    const lastLocalId = localApps.length > 0 ? Math.max(...localApps.map(app => app.id)) : 0;
+                    const newApps = remoteApps.filter(app => app.id > lastLocalId);
+                    
+                    if (newApps.length > 0) {
+                        showUpdateNotification(newApps);
+                    }
+                    
+                    localStorage.setItem('lastUpdateCheck', now.toString());
+                    localStorage.setItem('apps', JSON.stringify(remoteApps));
+                    apps = remoteApps;
+                }
+            } catch (error) {
+                console.error('检查更新失败:', error);
+            }
+        }
+        
+        function showUpdateNotification(newApps) {
+            const notification = document.getElementById('updateNotification');
+            const message = document.getElementById('notificationMessage');
+            const appName = document.getElementById('updatedAppName');
+            const link = document.getElementById('notificationLink');
+            
+            if (newApps.length === 1) {
+                message.textContent = 'يېڭى قوللىنىش قوشۇلدى:';
+                appName.textContent = newApps[0].name;
+                link.href = `#app-${newApps[0].id}`;
+            } else {
+                message.textContent = `${newApps.length} يېڭى قوللىنىش قوشۇلدى`;
+                appName.textContent = '';
+                link.href = '#';
+            }
+            
+            notification.style.display = 'block';
+            
+            // 自动10秒后消失
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 10000);
+        }
+        
         // 初始化
         document.addEventListener('DOMContentLoaded', async function() {
             new WOW().init();
@@ -779,6 +952,9 @@
             // 加载应用数据
             await loadApps();
             displayApps();
+            
+            // 检查更新
+            checkForUpdates();
             
             // 排序按钮事件
             document.querySelectorAll('.sort-btn').forEach(btn => {
@@ -858,6 +1034,48 @@
                 e.preventDefault();
                 alert('ئىلتىماسىڭىز قوبۇل قىلىندى! راھمەت!');
                 this.reset();
+            });
+            
+            // 反馈表单提交处理
+            document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const feedback = {
+                    type: document.getElementById('feedbackType').value,
+                    content: document.getElementById('feedbackContent').value,
+                    contact: document.getElementById('userContact').value || 'none',
+                    timestamp: new Date().toISOString(),
+                    appVersion: '1.0.0'
+                };
+                
+                try {
+                    // 保存到JSONBin.io
+                    const response = await fetch('https://api.jsonbin.io/v3/b', {
+                        method: 'POST',
+                        headers: {
+                            'X-Access-Key': API_KEY,
+                            'Content-Type': 'application/json',
+                            'X-Bin-Name': 'ALFDroid-Feedbacks'
+                        },
+                        body: JSON.stringify(feedback)
+                    });
+                    
+                    if (response.ok) {
+                        alert('رەھمەت! ئىنكاسىڭىز قوبۇل قىلىندى.');
+                        $('#feedbackModal').modal('hide');
+                        this.reset();
+                    } else {
+                        throw new Error('Feedback submission failed');
+                    }
+                } catch (error) {
+                    console.error('Feedback error:', error);
+                    alert('ئىنكاس يوللاش مەغلۇپ بولدى، قايتا سىناڭ!');
+                }
+            });
+            
+            // 关闭通知按钮
+            document.getElementById('closeNotification').addEventListener('click', function() {
+                document.getElementById('updateNotification').style.display = 'none';
             });
         });
     </script>
