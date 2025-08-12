@@ -193,6 +193,7 @@
             width: 100%;
             height: 180px;
             object-fit: cover;
+            cursor: pointer;
         }
         
         .app-body {
@@ -203,6 +204,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 10px;
+            cursor: pointer;
         }
         
         .app-description {
@@ -452,6 +454,120 @@
             margin-bottom: 10px;
         }
         
+        /* 应用详情模态框样式 */
+        .app-detail-modal .modal-dialog {
+            max-width: 800px;
+        }
+        .app-detail-modal .modal-body {
+            padding: 20px;
+        }
+        .app-main-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background-color: #f5f7fa;
+            cursor: pointer;
+        }
+        .app-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .app-thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .app-thumbnail:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        .app-thumbnail.active {
+            border-color: var(--primary-color);
+        }
+        .app-info-section {
+            margin-bottom: 20px;
+        }
+        .app-info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .app-detail-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .app-detail-buttons .btn {
+            flex: 1;
+        }
+        .version-history {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .version-item {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .version-item:last-child {
+            border-bottom: none;
+        }
+        .version-number {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .version-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .favorite-btn i {
+            color: var(--accent-color);
+        }
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 1.8rem;
@@ -477,6 +593,14 @@
                 margin-left: 0;
                 margin-right: 10px;
             }
+            
+            .app-main-image {
+                height: 200px;
+            }
+            .app-thumbnail {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
@@ -488,6 +612,59 @@
             <h5><i class="fas fa-bell"></i> يېڭىلانما</h5>
             <p id="notificationMessage">يېڭى قوللىنىش قوشۇلدى: <span id="updatedAppName"></span></p>
             <a href="#" id="notificationLink" class="btn btn-sm btn-primary">كۆرۈش</a>
+        </div>
+    </div>
+
+    <!-- 应用详情模态框 -->
+    <div class="modal fade app-detail-modal" id="appDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appDetailTitle">ئەپ تەپسىلاتى</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="appDetailMainImage" class="app-main-image" src="" alt="ئەپ رەسىمى">
+                    
+                    <div class="app-thumbnails" id="appThumbnails">
+                        <!-- 缩略图将通过JavaScript动态添加 -->
+                    </div>
+                    
+                    <div class="app-info-section">
+                        <h4 id="appDetailName"></h4>
+                        <div class="app-meta mb-3">
+                            <span id="appDetailSize"></span>
+                            <span id="appDetailVersion"></span>
+                            <span id="appDetailRating"></span>
+                        </div>
+                        <p id="appDetailDescription" class="app-description"></p>
+                    </div>
+                    
+                    <div class="app-info-section">
+                        <h5 class="app-info-title">تەپسىلاتى</h5>
+                        <p id="appDetailFullDescription"></p>
+                    </div>
+                    
+                    <div class="version-history">
+                        <h5>نەشر تارىخى</h5>
+                        <div id="versionHistoryList">
+                            <!-- 版本历史将通过JavaScript动态添加 -->
+                        </div>
+                    </div>
+                    
+                    <div class="app-detail-buttons">
+                        <button class="btn btn-primary" id="appDetailDownloadBtn">
+                            <i class="fas fa-download me-1"></i> چۈشۈرۈش
+                        </button>
+                        <button class="btn btn-outline-danger" id="appDetailFavoriteBtn">
+                            <i class="far fa-heart me-1"></i> خالىغانلارغا قوشۇش
+                        </button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> يېپىش
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -510,7 +687,7 @@
                         <a class="nav-link" href="#">ئەپلەر</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">تۈرلەر</a>
+                        <a class="nav-link" href="#" id="favorites-link">خالىغانلار</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">بىز ھەققىمىزدا</a>
@@ -670,7 +847,7 @@
                         <ul>
                             <li><a href="#">باش بەت</a></li>
                             <li><a href="#">ئەپلەر</a></li>
-                            <li><a href="#">تۈرلەر</a></li>
+                            <li><a href="#" id="footer-favorites-link">خالىغانلار</a></li>
                             <li><a href="#">بىز ھەققىمىزدا</a></li>
                             <li><a href="#">ئالاقە</a></li>
                         </ul>
@@ -765,8 +942,10 @@
         let apps = [];
         let currentSort = 'rating';
         let currentCategory = 'all';
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let currentView = 'all'; // 'all' or 'favorites'
         
-        // 从JSONBin.io加载应用数据
+        // 从JSONBin.io加载数据
         async function loadApps() {
             try {
                 const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -792,12 +971,163 @@
             }
         }
         
+        // 显示应用详情
+        function showAppDetail(appId) {
+            const app = apps.find(a => a.id === appId);
+            if (!app) return;
+            
+            const modal = new bootstrap.Modal(document.getElementById('appDetailModal'));
+            const thumbnailsContainer = document.getElementById('appThumbnails');
+            const versionList = document.getElementById('versionHistoryList');
+            const isFavorite = favorites.includes(appId);
+            
+            // 设置基本信息
+            document.getElementById('appDetailTitle').textContent = app.name;
+            document.getElementById('appDetailName').textContent = app.name;
+            document.getElementById('appDetailMainImage').src = app.imageUrl;
+            document.getElementById('appDetailDescription').textContent = app.description;
+            document.getElementById('appDetailFullDescription').textContent = app.fullDescription || app.description;
+            document.getElementById('appDetailSize').textContent = app.size;
+            document.getElementById('appDetailVersion').textContent = app.version;
+            document.getElementById('appDetailRating').innerHTML = `${app.rating} <i class="fas fa-star text-warning"></i>`;
+            
+            // 设置收藏按钮状态
+            const favoriteBtn = document.getElementById('appDetailFavoriteBtn');
+            favoriteBtn.innerHTML = isFavorite 
+                ? '<i class="fas fa-heart me-1"></i> خالىغانلاردىن چىقىرىش'
+                : '<i class="far fa-heart me-1"></i> خالىغانلارغا قوشۇش';
+            favoriteBtn.classList.toggle('btn-outline-danger', !isFavorite);
+            favoriteBtn.classList.toggle('btn-danger', isFavorite);
+            
+            // 设置下载按钮
+            document.getElementById('appDetailDownloadBtn').onclick = function() {
+                downloadApp(appId);
+            };
+            
+            // 设置收藏按钮
+            favoriteBtn.onclick = function() {
+                toggleFavorite(appId);
+                const newIsFavorite = favorites.includes(appId);
+                favoriteBtn.innerHTML = newIsFavorite 
+                    ? '<i class="fas fa-heart me-1"></i> خالىغانلاردىن چىقىرىش'
+                    : '<i class="far fa-heart me-1"></i> خالىغانلارغا قوشۇش';
+                favoriteBtn.classList.toggle('btn-outline-danger', !newIsFavorite);
+                favoriteBtn.classList.toggle('btn-danger', newIsFavorite);
+                
+                // 更新卡片上的收藏状态
+                const favBtn = document.querySelector(`.favorite-btn[data-id="${appId}"]`);
+                if (favBtn) {
+                    favBtn.innerHTML = newIsFavorite 
+                        ? '<i class="fas fa-heart"></i>'
+                        : '<i class="far fa-heart"></i>';
+                }
+            };
+            
+            // 清除旧的缩略图
+            thumbnailsContainer.innerHTML = '';
+            
+            // 添加主图作为第一个缩略图
+            addThumbnail(app.imageUrl, thumbnailsContainer, true);
+            
+            // 添加额外的图片缩略图
+            if (app.imageUrl2) addThumbnail(app.imageUrl2, thumbnailsContainer);
+            if (app.imageUrl3) addThumbnail(app.imageUrl3, thumbnailsContainer);
+            if (app.imageUrl4) addThumbnail(app.imageUrl4, thumbnailsContainer);
+            if (app.imageUrl5) addThumbnail(app.imageUrl5, thumbnailsContainer);
+            
+            // 显示版本历史
+            if (app.versions && app.versions.length > 0) {
+                versionList.innerHTML = app.versions.map(version => `
+                    <div class="version-item">
+                        <div class="version-number">${version.version}</div>
+                        <div class="version-date">${version.date}</div>
+                        <div>${version.notes}</div>
+                    </div>
+                `).join('');
+            } else {
+                versionList.innerHTML = '<div class="text-muted">نەشر تارىخى يوق</div>';
+            }
+            
+            // 主图点击放大
+            document.getElementById('appDetailMainImage').onclick = function() {
+                const lightbox = document.createElement('div');
+                lightbox.className = 'lightbox';
+                lightbox.innerHTML = `<img src="${this.src}" alt="ئەپ رەسىمى">`;
+                document.body.appendChild(lightbox);
+                lightbox.onclick = () => lightbox.remove();
+            };
+            
+            // 显示模态框
+            modal.show();
+        }
+        
+        // 添加缩略图
+        function addThumbnail(imageUrl, container, isActive = false) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.className = `app-thumbnail ${isActive ? 'active' : ''}`;
+            img.alt = 'ئەپ رەسىمى';
+            
+            img.addEventListener('click', function() {
+                // 更新主图
+                document.getElementById('appDetailMainImage').src = imageUrl;
+                
+                // 更新活动缩略图
+                document.querySelectorAll('.app-thumbnail').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+            
+            container.appendChild(img);
+        }
+        
+        // 切换收藏状态
+        function toggleFavorite(appId) {
+            const index = favorites.indexOf(appId);
+            if (index === -1) {
+                favorites.push(appId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            
+            if (currentView === 'favorites') {
+                displayApps();
+            }
+        }
+        
         // 显示应用列表
         function displayApps() {
             const container = document.getElementById('apps-container');
             const noAppsDiv = document.getElementById('no-apps');
             
-            if (apps.length === 0) {
+            let filteredApps = [...apps];
+            
+            // 排序
+            switch (currentSort) {
+                case 'popular':
+                    filteredApps.sort((a, b) => (b.downloadCount || 0) - (a.downloadCount || 0));
+                    break;
+                case 'rating':
+                    filteredApps.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                    break;
+                case 'newest':
+                    filteredApps.sort((a, b) => b.id - a.id);
+                    break;
+            }
+            
+            // 过滤分类
+            if (currentCategory !== 'all') {
+                filteredApps = filteredApps.filter(app => app.category === currentCategory);
+            }
+            
+            // 如果是收藏视图
+            if (currentView === 'favorites') {
+                filteredApps = filteredApps.filter(app => favorites.includes(app.id));
+            }
+            
+            if (filteredApps.length === 0) {
                 container.innerHTML = '';
                 noAppsDiv.style.display = 'block';
                 return;
@@ -805,31 +1135,15 @@
             
             noAppsDiv.style.display = 'none';
             
-            // 排序
-            let sortedApps = [...apps];
-            switch (currentSort) {
-                case 'popular':
-                    sortedApps.sort((a, b) => (b.downloadCount || 0) - (a.downloadCount || 0));
-                    break;
-                case 'rating':
-                    sortedApps.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-                    break;
-                case 'newest':
-                    sortedApps.sort((a, b) => b.id - a.id);
-                    break;
-            }
-            
-            // 过滤
-            if (currentCategory !== 'all') {
-                sortedApps = sortedApps.filter(app => app.category === currentCategory);
-            }
-            
-            container.innerHTML = sortedApps.map(app => `
+            container.innerHTML = filteredApps.map(app => `
                 <div class="col-md-4">
                     <div class="app-card animate__animated animate__fadeInUp" id="app-${app.id}">
-                        <img src="${app.imageUrl}" class="app-image" alt="${app.name}">
+                        <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
+                            <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
+                        </button>
+                        <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetail(${app.id})">
                         <div class="app-body">
-                            <h3 class="app-title">${app.name}</h3>
+                            <h3 class="app-title" onclick="showAppDetail(${app.id})">${app.name}</h3>
                             <p class="app-description">${app.description}</p>
                             <div class="app-meta">
                                 <span>${app.size}</span>
@@ -931,6 +1245,11 @@
                 message.textContent = 'يېڭى قوللىنىش قوشۇلدى:';
                 appName.textContent = newApps[0].name;
                 link.href = `#app-${newApps[0].id}`;
+                link.onclick = () => {
+                    showAppDetail(newApps[0].id);
+                    notification.style.display = 'none';
+                    return false;
+                };
             } else {
                 message.textContent = `${newApps.length} يېڭى قوللىنىش قوشۇلدى`;
                 appName.textContent = '';
@@ -943,6 +1262,19 @@
             setTimeout(() => {
                 notification.style.display = 'none';
             }, 10000);
+        }
+        
+        // 切换收藏视图
+        function showFavorites() {
+            currentView = 'favorites';
+            document.querySelectorAll('.category-btn.active').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.category-btn[data-category="all"]').classList.add('active');
+            currentCategory = 'all';
+            displayApps();
+            
+            // 更新活动导航项
+            document.querySelectorAll('.nav-link.active').forEach(link => link.classList.remove('active'));
+            document.getElementById('favorites-link').classList.add('active');
         }
         
         // 初始化
@@ -972,8 +1304,24 @@
                     document.querySelector('.category-btn.active').classList.remove('active');
                     this.classList.add('active');
                     currentCategory = this.getAttribute('data-category');
+                    currentView = 'all';
                     displayApps();
+                    
+                    // 更新活动导航项
+                    document.querySelectorAll('.nav-link.active').forEach(link => link.classList.remove('active'));
+                    document.querySelector('.nav-link[href="#"]').classList.add('active');
                 });
+            });
+            
+            // 收藏链接事件
+            document.getElementById('favorites-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showFavorites();
+            });
+            
+            document.getElementById('footer-favorites-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showFavorites();
             });
             
             // 搜索功能
@@ -996,9 +1344,12 @@
                 container.innerHTML = filteredApps.map(app => `
                     <div class="col-md-4">
                         <div class="app-card">
-                            <img src="${app.imageUrl}" class="app-image" alt="${app.name}">
+                            <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
+                                <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
+                            </button>
+                            <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetail(${app.id})">
                             <div class="app-body">
-                                <h3 class="app-title">${app.name}</h3>
+                                <h3 class="app-title" onclick="showAppDetail(${app.id})">${app.name}</h3>
                                 <p class="app-description">${app.description}</p>
                                 <div class="app-meta">
                                     <span>${app.size}</span>
@@ -1077,6 +1428,10 @@
             document.getElementById('closeNotification').addEventListener('click', function() {
                 document.getElementById('updateNotification').style.display = 'none';
             });
+            
+            // 添加全局函数
+            window.showAppDetail = showAppDetail;
+            window.toggleFavorite = toggleFavorite;
         });
     </script>
 </body>
