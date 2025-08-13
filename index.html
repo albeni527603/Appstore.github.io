@@ -182,6 +182,7 @@
             margin-bottom: 30px;
             height: 100%;
             text-align: right;
+            position: relative;
         }
         
         .app-card:hover {
@@ -233,7 +234,12 @@
             transition: all 0.3s;
         }
         
-        .download-btn:hover {
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .download-btn:hover:not(:disabled) {
             opacity: 0.9;
         }
         
@@ -568,6 +574,37 @@
             max-height: 90%;
         }
         
+        /* 付费应用标识 */
+        .badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 50px;
+        }
+        
+        /* 支付区域样式 */
+        .payment-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info li {
+            margin-bottom: 8px;
+        }
+        
+        .qr-code-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        
+        .contact-info ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 1.8rem;
@@ -600,6 +637,10 @@
             .app-thumbnail {
                 width: 80px;
                 height: 80px;
+            }
+            
+            .app-detail-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -643,6 +684,31 @@
                     <div class="app-info-section">
                         <h5 class="app-info-title">تەپسىلاتى</h5>
                         <p id="appDetailFullDescription"></p>
+                    </div>
+                    
+                    <!-- 支付区域 -->
+                    <div class="payment-section" id="paymentSection" style="display: none;">
+                        <h5 class="app-info-title">پۇل تۆلەش</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="qr-code-container text-center mb-3">
+                                    <img id="qrCodeImage" src="" alt="QR Code" class="img-fluid mb-2" style="max-width: 200px;">
+                                    <p>QR كود سىكانىرلاپ ھەق تۆلەڭ</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="contact-info">
+                                    <h6>ئالاقىلىشىش ئۇسۇلى:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-phone me-2"></i> تېلېفون: 963982199321 +</li>
+                                        <li><i class="fas fa-envelope me-2"></i> ئېلخەت: alftermux@gmail.com</li>
+                                        <li><i class="fab fa-weixin me-2"></i> Telegram: @hayatimsan527603 </li>
+                                        <li><i class="fab fa-whatsapp me-2"></i> WhatsApp:+ 963982199321</li>
+                                    </ul>
+                                    <p class="mt-2">ھەق تۆلەنگەندىن كېيىن بىز بىلەن ئالاقىلىشىپ قوللىنىشنى چۈشۈرۈپ ئالىسىز.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="version-history">
@@ -872,7 +938,7 @@
                         <h5>ئالاقە</h5>
                         <ul>
                             <li><i class="fas fa-map-marker-alt me-2"></i>يەر شارى</li>
-                            <li><i class="fas fa-phone me-2"></i></li>
+                            <li><i class="fas fa-phone me-2"></i> 963982199321+</li>
                             <li><i class="fas fa-envelope me-2"></i> alftermux@gmail.com</li>
                         </ul>
                     </div>
@@ -980,6 +1046,18 @@
             const thumbnailsContainer = document.getElementById('appThumbnails');
             const versionList = document.getElementById('versionHistoryList');
             const isFavorite = favorites.includes(appId);
+            const paymentSection = document.getElementById('paymentSection');
+            const downloadBtn = document.getElementById('appDetailDownloadBtn');
+            
+            // 显示或隐藏支付区域
+            if (app.paid) {
+                paymentSection.style.display = 'block';
+                downloadBtn.style.display = 'none';
+                document.getElementById('qrCodeImage').src = app.qrCodeUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(app.downloadUrl);
+            } else {
+                paymentSection.style.display = 'none';
+                downloadBtn.style.display = 'block';
+            }
             
             // 设置基本信息
             document.getElementById('appDetailTitle').textContent = app.name;
@@ -1000,7 +1078,7 @@
             favoriteBtn.classList.toggle('btn-danger', isFavorite);
             
             // 设置下载按钮
-            document.getElementById('appDetailDownloadBtn').onclick = function() {
+            downloadBtn.onclick = function() {
                 downloadApp(appId);
             };
             
@@ -1138,6 +1216,7 @@
             container.innerHTML = filteredApps.map(app => `
                 <div class="col-md-4">
                     <div class="app-card animate__animated animate__fadeInUp" id="app-${app.id}">
+                        ${app.paid ? '<span class="badge bg-danger position-absolute top-0 end-0 m-2">ھەقلىق</span>' : ''}
                         <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
                             <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
                         </button>
@@ -1150,8 +1229,8 @@
                                 <span>${app.version}</span>
                                 <span>${app.rating} <i class="fas fa-star text-warning"></i></span>
                             </div>
-                            <button class="download-btn" data-id="${app.id}">
-                                <i class="fas fa-download me-1"></i> چۈشۈرۈش
+                            <button class="download-btn" data-id="${app.id}" ${app.paid ? 'disabled' : ''}>
+                                <i class="fas fa-download me-1"></i> ${app.paid ? 'پۇللۇق ئەپ' : 'چۈشۈرۈش'}
                             </button>
                         </div>
                     </div>
@@ -1173,6 +1252,12 @@
             
             if (!app || !app.downloadUrl) {
                 alert('چۈشۈرۈش ئادرېسى توغرا ئەمەس!');
+                return;
+            }
+            
+            // 如果是付费应用，显示支付信息
+            if (app.paid) {
+                showAppDetail(appId);
                 return;
             }
             
@@ -1344,6 +1429,7 @@
                 container.innerHTML = filteredApps.map(app => `
                     <div class="col-md-4">
                         <div class="app-card">
+                            ${app.paid ? '<span class="badge bg-danger position-absolute top-0 end-0 m-2">ھەقلىق</span>' : ''}
                             <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
                                 <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
                             </button>
@@ -1356,8 +1442,8 @@
                                     <span>${app.version}</span>
                                     <span>${app.rating} <i class="fas fa-star text-warning"></i></span>
                                 </div>
-                                <button class="download-btn" data-id="${app.id}">
-                                    <i class="fas fa-download me-1"></i> چۈشۈرۈش
+                                <button class="download-btn" data-id="${app.id}" ${app.paid ? 'disabled' : ''}>
+                                    <i class="fas fa-download me-1"></i> ${app.paid ? 'پۇللۇق ئەپ' : 'چۈشۈرۈش'}
                                 </button>
                             </div>
                         </div>
