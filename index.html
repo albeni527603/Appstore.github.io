@@ -389,29 +389,6 @@
             font-size: 0.8rem;
         }
         
-        .admin-link {
-            position: fixed;
-            left: 30px;
-            bottom: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-        
-        .admin-link:hover {
-            transform: scale(1.1);
-            color: white;
-        }
-        
         /* 反馈按钮样式 */
         .feedback-btn {
             position: fixed;
@@ -460,13 +437,12 @@
             margin-bottom: 10px;
         }
         
-        /* 应用详情模态框样式 */
-        .app-detail-modal .modal-dialog {
-            max-width: 800px;
+        /* 应用详情页面样式 */
+        #app-detail-page {
+            display: none;
+            padding: 20px 0;
         }
-        .app-detail-modal .modal-body {
-            padding: 20px;
-        }
+        
         .app-main-image {
             width: 100%;
             height: 300px;
@@ -476,6 +452,7 @@
             background-color: #f5f7fa;
             cursor: pointer;
         }
+        
         .app-thumbnails {
             display: flex;
             gap: 10px;
@@ -483,6 +460,7 @@
             overflow-x: auto;
             padding-bottom: 10px;
         }
+        
         .app-thumbnail {
             width: 100px;
             height: 100px;
@@ -492,29 +470,19 @@
             border: 2px solid transparent;
             transition: all 0.3s;
         }
-        .app-thumbnail:hover {
+        
+        .app-thumbnail:hover, .app-thumbnail.active {
             border-color: var(--primary-color);
             transform: scale(1.05);
         }
-        .app-thumbnail.active {
-            border-color: var(--primary-color);
-        }
-        .app-info-section {
+        
+        .payment-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
-        .app-info-title {
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-        .app-detail-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .app-detail-buttons .btn {
-            flex: 1;
-        }
+        
         .version-history {
             max-height: 200px;
             overflow-y: auto;
@@ -523,39 +491,26 @@
             border-radius: 5px;
             margin-top: 15px;
         }
+        
         .version-item {
             padding: 8px 0;
             border-bottom: 1px dashed #eee;
         }
+        
         .version-item:last-child {
             border-bottom: none;
         }
+        
         .version-number {
             font-weight: bold;
             color: var(--primary-color);
         }
+        
         .version-date {
             font-size: 0.8rem;
             color: #888;
         }
-        .favorite-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1;
-        }
-        .favorite-btn i {
-            color: var(--accent-color);
-        }
+        
         .lightbox {
             position: fixed;
             top: 0;
@@ -567,11 +522,85 @@
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            cursor: zoom-out;
+            cursor: default;
         }
-        .lightbox img {
+        
+        .lightbox-content {
+            position: relative;
             max-width: 90%;
             max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2001;
+            transition: all 0.3s;
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .lightbox-prev {
+            left: 20px;
+        }
+        
+        .lightbox-next {
+            right: 20px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 2001;
+            transition: all 0.3s;
+        }
+        
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 15px;
+            borderRadius: 20px;
+            font-size: 0.9rem;
         }
         
         /* 付费应用标识 */
@@ -603,6 +632,71 @@
         .contact-info ul {
             list-style-type: none;
             padding: 0;
+        }
+        
+        /* 应用详情模态框样式 */
+        .app-detail-modal .modal-dialog {
+            max-width: 800px;
+        }
+        .app-detail-modal .modal-body {
+            padding: 20px;
+        }
+        
+        .app-info-section {
+            margin-bottom: 20px;
+        }
+        .app-info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .app-detail-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .app-detail-buttons .btn {
+            flex: 1;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .favorite-btn i {
+            color: var(--accent-color);
+        }
+        
+        /* 自定义通知 */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         
         @media (max-width: 768px) {
@@ -642,10 +736,28 @@
             .app-detail-buttons {
                 flex-direction: column;
             }
+            
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .custom-alert {
+                left: 20px;
+                right: 20px;
+                min-width: auto;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 自定义通知 -->
+    <div id="customAlert" class="custom-alert alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+        <span id="alertMessage"></span>
+        <button type="button" class="btn-close" onclick="hideAlert()"></button>
+    </div>
+
     <!-- 更新通知 -->
     <div id="updateNotification" class="notification-container" style="display: none;">
         <div class="notification-content">
@@ -677,6 +789,7 @@
                             <span id="appDetailSize"></span>
                             <span id="appDetailVersion"></span>
                             <span id="appDetailRating"></span>
+                            <span id="appDetailPrice" class="text-success fw-bold"></span>
                         </div>
                         <p id="appDetailDescription" class="app-description"></p>
                     </div>
@@ -702,7 +815,7 @@
                                     <ul class="list-unstyled">
                                         <li><i class="fas fa-phone me-2"></i> تېلېفون: 963982199321 +</li>
                                         <li><i class="fas fa-envelope me-2"></i> ئېلخەت: alftermux@gmail.com</li>
-                                        <li><i class="fab fa-weixin me-2"></i> Telegram: @hayatimsan527603 </li>
+                                        <li><i class="fab fa-telegram me-2"></i> Telegram: @hayatimsan527603</li>
                                         <li><i class="fab fa-whatsapp me-2"></i> WhatsApp:+ 963982199321</li>
                                     </ul>
                                     <p class="mt-2">ھەق تۆلەنگەندىن كېيىن بىز بىلەن ئالاقىلىشىپ قوللىنىشنى چۈشۈرۈپ ئالىسىز.</p>
@@ -734,227 +847,330 @@
         </div>
     </div>
 
-    <!-- تور بەت باشلىقى -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-mobile-alt"></i>
-                ALFDroidئۇيغۇرچە ئەپ مەركىزى   
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">باش بەت</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">ئەپلەر</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="favorites-link">خالىغانلار</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">بىز ھەققىمىزدا</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">ئالاقە</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- قارشى سۆز بۆلەكى -->
-    <section class="hero-section animate__animated animate__fadeIn">
-        <div class="container">
-            <h1 class="hero-title">ئەڭ ياخشى ئاندرويىد ئەپلەر</h1>
-            <p class="hero-subtitle">بىز سىز ئۈچۈن ئەڭ ياخشى ۋە ئەڭ ئۆزگىچە ئەپلەرنى تاللايمىز. ھەقسىز چۈشۈرۈپ ئىشلىتىڭ</p>
-            
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="قوللىنىش ئىزدەش...">
-                <button class="search-btn">
-                    <i class="fas fa-search"></i>
+    <!-- 应用详情页面 -->
+    <div id="app-detail-page">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#" onclick="showHomePage(); return false;">
+                    <i class="fas fa-mobile-alt"></i>
+                    ALFDroid ئۇيغۇرچە ئەپ مەركىزى
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDetail">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
+                <div class="collapse navbar-collapse" id="navbarNavDetail">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showHomePage(); return false;">باش بەت</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showHomePage(); window.location.hash = '#apps-container'; return false;">ئەپلەر</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </section>
+        </nav>
 
-    <!-- ئەپلەر قىسىمى -->
-    <div class="container my-5">
-        <h2 class="section-title animate__animated animate__fadeInUp">ئۇيغۇرچە ئەپلەر</h2>
-        
-        <div class="sort-options animate__animated animate__fadeInUp">
-            <button class="sort-btn" data-sort="popular">ئەڭ كۆپ چۈشۈرۈلگەن</button>
-            <button class="sort-btn active" data-sort="rating">ئەڭ يۇقىرى باھا</button>
-            <button class="sort-btn" data-sort="newest">ئەڭ يېڭى</button>
-        </div>
-        
-        <div class="category-filter animate__animated animate__fadeInUp">
-            <button class="category-btn active" data-category="all">ھەممىسى</button>
-            <button class="category-btn" data-category="social">ئىجتىمائىي</button>
-            <button class="category-btn" data-category="tool">قورال</button>
-            <button class="category-btn" data-category="game">ئويۇن</button>
-            <button class="category-btn" data-category="education">ئوقۇتۇش</button>
-        </div>
-        
-        <div class="row" id="apps-container">
-            <!-- ئەپلەر بۇ يەرگە JavaScript ئارقىلىق قۇرۇلىدۇ -->
-        </div>
-    </div>
-
-    <!-- ئالاھىدىلىك بۆلەكى -->
-    <section class="feature-section">
-        <div class="container">
-            <h2 class="section-title animate__animated animate__fadeInUp">بىزنىڭ ئالاھىدىلىكىمىز</h2>
-            
+        <div class="container my-5">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3 class="feature-title">بىخەتەرلىك</h3>
-                        <p class="feature-text">
-                            بىز تەمىنلىگەن بارلىق قوللىنىشلار قاتتىق تەكشۈرۈلگەن ۋە ۋىرۇسسىز.
-                        </p>
+                <div class="col-md-6">
+                    <img id="appPageMainImage" class="app-main-image" src="" alt="ئەپ رەسىمى">
+                    
+                    <div class="app-thumbnails" id="appPageThumbnails">
+                        <!-- 缩略图将通过JavaScript动态添加 -->
                     </div>
                 </div>
                 
-                <div class="col-md-4">
-                    <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="feature-title">تېزلىك</h3>
-                        <p class="feature-text">
-                            ئەڭ تېز ۋە ئۈنۈملۈك قوللىنىشلارنى تاللايمىز.
-                        </p>
+                <div class="col-md-6">
+                    <h1 id="appPageName"></h1>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span id="appPageRating" class="text-warning"></span>
+                        <span class="badge bg-primary" id="appPageCategory"></span>
                     </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.5s">
-                        <div class="feature-icon">
-                            <i class="fas fa-language"></i>
-                        </div>
-                        <h3 class="feature-title">ئۇيغۇرچە</h3>
-                        <p class="feature-text">
-                            بارلىق قوللىنىشلار ئۇيغۇر تىلىدا تەمىنلىنىدۇ.
-                        </p>
+                    
+                    <div class="app-meta mb-3">
+                        <span id="appPageSize" class="me-3"></span>
+                        <span id="appPageVersion" class="me-3"></span>
+                        <span id="appPageDownloads" class="me-3"></span>
+                        <span id="appPagePrice" class="text-success fw-bold"></span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ئەپ ئىلتىماس قىلىش بۆلەكى -->
-    <section class="request-app-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card request-card">
-                        <div class="card-body">
-                            <h3 class="section-title animate__animated animate__fadeInUp">ئەپ ئىلتىماس قىلىش</h3>
-                            <form id="requestAppForm" class="animate__animated animate__fadeInUp">
-                                <div class="mb-3">
-                                    <label for="appName" class="form-label">ئەپ ئىسمى</label>
-                                    <input type="text" class="form-control" id="appName" placeholder="ئىلتىماس قىلىۋاتقان ئەپ ئىسمى" required>
+                    
+                    <p id="appPageDescription" class="lead"></p>
+                    
+                    <div class="app-info-section mb-4">
+                        <h4 class="app-info-title">تەپسىلاتى</h4>
+                        <p id="appPageFullDescription"></p>
+                    </div>
+                    
+                    <!-- 支付区域 -->
+                    <div class="payment-section" id="appPagePaymentSection" style="display: none;">
+                        <h5 class="app-info-title">پۇل تۆلەش</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="qr-code-container text-center mb-3">
+                                    <img id="appPageQrCodeImage" src="" alt="QR Code" class="img-fluid mb-2" style="max-width: 200px;">
+                                    <p>QR كود سىكانىرلاپ ھەق تۆلەڭ</p>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="appDescription" class="form-label">ئەپ ھەققىدە</label>
-                                    <textarea class="form-control" id="appDescription" rows="3" placeholder="ئەپ ھەققىدە قىسقىچە چۈشەندۈرۈش" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="contact-info">
+                                    <h6>ئالاقىلىشىش ئۇسۇلى:</h6>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-phone me-2"></i> تېلېفون: 963982199321 +</li>
+                                        <li><i class="fas fa-envelope me-2"></i> ئېلخەت: alftermux@gmail.com</li>
+                                        <li><i class="fab fa-telegram me-2"></i> Telegram: @hayatimsan527603</li>
+                                        <li><i class="fab fa-whatsapp me-2"></i> WhatsApp:+ 963982199321</li>
+                                    </ul>
+                                    <p class="mt-2">ھەق تۆلەنگەندىن كېيىن بىز بىلەن ئالاقىلىشىپ قوللىنىشنى چۈشۈرۈپ ئالىسىز.</p>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="userEmail" class="form-label">ئېلخەت ئادرېسىڭىز (تاللىما)</label>
-                                    <input type="email" class="form-control" id="userEmail" placeholder="ئەپ قوشۇلغاندا خەۋەر قىلىمىز">
-                                </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane me-1"></i> ئىلتىماس يوللاش
-                                </button>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ئەگەر قوللىنىش بولمىسا -->
-    <div class="container text-center py-5" id="no-apps" style="display: none;">
-        <i class="fas fa-mobile-alt fa-5x mb-4 text-muted"></i>
-        <h3>قوللىنىش تېپىلمىدى</h3>
-        <p class="text-muted">ھازىرچە تور بەتكە قوللىنىش قۇيۇلمىغان</p>
-    </div>
-
-    <!-- تۈر ئاستى -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="footer-logo">
-                        <i class="fas fa-mobile-alt me-2"></i> ALFDroidئۇيغۇرچە ئەپ مەركىزى
-                    </div>
-                    <p class="footer-about">
-                        بىز ئاندرويىد ئىشلەتكۈچىلەر ئۈچۈن ئەڭ ياخشى ئەپلەرنى تاللايمىز ۋە تەمىنلىۋاتىمىز. بىز بىلەن بىللە بولۇڭ
-                    </p>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <div class="footer-links">
-                        <h5>ئۇلىنىشلار</h5>
-                        <ul>
-                            <li><a href="#">باش بەت</a></li>
-                            <li><a href="#">ئەپلەر</a></li>
-                            <li><a href="#" id="footer-favorites-link">خالىغانلار</a></li>
-                            <li><a href="#">بىز ھەققىمىزدا</a></li>
-                            <li><a href="#">ئالاقە</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <div class="footer-links">
-                        <h5>ياردەم</h5>
-                        <ul>
-                            <li><a href="#">ئىشلىتىش يولنامىسى</a></li>
-                            <li><a href="#">ئىشەنچلىكلىك</a></li>
-                            <li><a href="#">ئىزدىمەك</a></li>
-                            <li><a href="#">ئىنكاس</a></li>
-                            <li><a href="#">ئۇچۇر</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-4 mb-4">
-                    <div class="footer-links">
-                        <h5>ئالاقە</h5>
-                        <ul>
-                            <li><i class="fas fa-map-marker-alt me-2"></i>يەر شارى</li>
-                            <li><i class="fas fa-phone me-2"></i> 963982199321+</li>
-                            <li><i class="fas fa-envelope me-2"></i> alftermux@gmail.com</li>
-                        </ul>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4">
+                        <button class="btn btn-primary btn-lg me-md-2" id="appPageDownloadBtn">
+                            <i class="fas fa-download me-1"></i> چۈشۈرۈش
+                        </button>
+                        <button class="btn btn-outline-secondary btn-lg" onclick="showHomePage()">
+                            <i class="fas fa-arrow-left me-1"></i> ئارقا
+                        </button>
+                        <button class="btn btn-outline-primary btn-lg" onclick="shareApp()">
+                            <i class="fas fa-share-alt me-1"></i> ئورتاقلىشىش
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="copyright">
-                <p>©2025 ALFDroid Studio</p>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="version-history">
+                        <h4>نەشر تارىخى</h4>
+                        <div id="appPageVersionHistoryList">
+                            <!-- 版本历史将通过JavaScript动态添加 -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- باشقۇرۇش بېتىگە ئۇلىنىش -->
-    <a href="admin.html" class="admin-link" title="باشقۇرۇش">
-        <i class="fas fa-cog"></i>
-    </a>
+    <!-- 主页内容 -->
+    <div id="home-page">
+        <!-- تور بەت باشلىقى -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-mobile-alt"></i>
+                    ALFDroid ئۇيغۇرچە ئەپ مەركىزى   
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">باش بەت</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">ئەپلەر</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="favorites-link">خالىغانلار</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">بىز ھەققىمىزدا</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">ئالاقە</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- قارشى سۆز بۆلەكى -->
+        <section class="hero-section animate__animated animate__fadeIn">
+            <div class="container">
+                <h1 class="hero-title">ئەڭ ياخشى ئاندرويىد ئەپلەر</h1>
+                <p class="hero-subtitle">بىز سىز ئۈچۈن ئەڭ ياخشى ۋە ئەڭ ئۆزگىچە ئەپلەرنى تاللايمىز.</p>
+                
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="ئەپ ئىزدەش...">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ئەپلەر قىسىمى -->
+        <div class="container my-5">
+            <h2 class="section-title animate__animated animate__fadeInUp">ئۇيغۇرچە ئەپلەر</h2>
+            
+            <div class="sort-options animate__animated animate__fadeInUp">
+                <button class="sort-btn" data-sort="popular">ئەڭ كۆپ چۈشۈرۈلگەن</button>
+                <button class="sort-btn active" data-sort="rating">ئەڭ يۇقىرى باھا</button>
+                <button class="sort-btn" data-sort="newest">ئەڭ يېڭى</button>
+            </div>
+            
+            <div class="category-filter animate__animated animate__fadeInUp">
+                <button class="category-btn active" data-category="all">ھەممىسى</button>
+                <button class="category-btn" data-category="social">ئىجتىمائىي</button>
+                <button class="category-btn" data-category="tool">قورال</button>
+                <button class="category-btn" data-category="game">ئويۇن</button>
+                <button class="category-btn" data-category="education">ئوقۇتۇش</button>
+            </div>
+            
+            <div class="row" id="apps-container">
+                <!-- ئەپلەر بۇ يەرگە JavaScript ئارقىلىق قۇرۇلىدۇ -->
+            </div>
+        </div>
+
+        <!-- ئالاھىدىلىك بۆلەكى -->
+        <section class="feature-section">
+            <div class="container">
+                <h2 class="section-title animate__animated animate__fadeInUp">بىزنىڭ ئالاھىدىلىكىمىز</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="feature-title">بىخەتەر</h3>
+                            <p class="feature-text">
+                                بىز تەمىنلىگەن بارلىق ئەپلەر قاتتىق تەكشۈرۈلگەن.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3 class="feature-title">تېز</h3>
+                            <p class="feature-text">
+                                ئەڭ تېز ۋە ئۈنۈملۈك ئەپلەرنى تاللايمىز.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="feature-box animate__animated animate__fadeInUp" data-wow-delay="0.5s">
+                            <div class="feature-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="feature-title">ئۇيغۇرچە</h3>
+                            <p class="feature-text">
+                                بارلىق ئەپلەر ئۇيغۇر تىلىدا تەمىنلىنىدۇ.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ئەپ ئىلتىماس قىلىش بۆلەكى -->
+        <section class="request-app-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card request-card">
+                            <div class="card-body">
+                                <h3 class="section-title animate__animated animate__fadeInUp">ئەپ ئىلتىماس قىلىش</h3>
+                                <form id="requestAppForm" class="animate__animated animate__fadeInUp">
+                                    <div class="mb-3">
+                                        <label for="appName" class="form-label">ئەپ ئىسمى</label>
+                                        <input type="text" class="form-control" id="appName" placeholder="ئىلتىماس قىلىۋاتقان ئەپ ئىسمى" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="appDescription" class="form-label">ئەپ ھەققىدە</label>
+                                        <textarea class="form-control" id="appDescription" rows="3" placeholder="ئەپ ھەققىدە قىسقىچە چۈشەندۈرۈش" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="userEmail" class="form-label">ئېلخەت ئادرېسىڭىز (تاللىما)</label>
+                                        <input type="email" class="form-control" id="userEmail" placeholder="ئەپ قوشۇلغاندا خەۋەر قىلىمىز">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-1"></i> ئىلتىماس يوللاش
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ئەگەر قوللىنىش بولمىسا -->
+        <div class="container text-center py-5" id="no-apps" style="display: none;">
+            <i class="fas fa-mobile-alt fa-5x mb-4 text-muted"></i>
+            <h3>قوللىنىش تېپىلمىدى</h3>
+            <p class="text-muted">ھازىرچە تور بەتكە قوللىنىش قۇيۇلمىغان</p>
+        </div>
+
+        <!-- تۈر ئاستى -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 mb-4">
+                        <div class="footer-logo">
+                            <i class="fas fa-mobile-alt me-2"></i> ALFDroid ئۇيغۇرچە ئەپ مەركىزى
+                        </div>
+                        <p class="footer-about">
+                            بىز ئاندرويىد ئىشلەتكۈچىلەر ئۈچۈن ئەڭ ياخشى ئەپلەرنى تاللايمىز ۋە تەمىنلىۋاتىمىز. بىز بىلەن بىللە بولۇڭ
+                        </p>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/share/15rDMzaSHc/" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://t.me/hayatimsan527603" class="social-icon" target="_blank"><i class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-4 mb-4">
+                        <div class="footer-links">
+                            <h5>ئۇلىنىشلار</h5>
+                            <ul>
+                                <li><a href="#">باش بەت</a></li>
+                                <li><a href="#">ئەپلەر</a></li>
+                                <li><a href="#" id="footer-favorites-link">خالىغانلار</a></li>
+                                <li><a href="#">بىز ھەققىمىزدا</a></li>
+                                <li><a href="#">ئالاقە</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-4 mb-4">
+                        <div class="footer-links">
+                            <h5>ياردەم</h5>
+                            <ul>
+                                <li><a href="#">ئىشلىتىش يولنامىسى</a></li>
+                                <li><a href="#">ئىشەنچلىكلىك</a></li>
+                                <li><a href="#">ئىزدىمەك</a></li>
+                                <li><a href="#">ئىنكاس</a></li>
+                                <li><a href="#">ئۇچۇر</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-4 mb-4">
+                        <div class="footer-links">
+                            <h5>ئالاقە</h5>
+                            <ul>
+                                <li><i class="fas fa-map-marker-alt me-2"></i>يەر شارى</li>
+                                <li><i class="fas fa-phone me-2"></i> 963982199321+</li>
+                                <li><i class="fas fa-envelope me-2"></i> alftermux@gmail.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="copyright">
+                    <p>©2025 ALFDroid Studio</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <!-- 反馈按钮和模态框 -->
     <div class="feedback-btn">
@@ -1010,6 +1226,63 @@
         let currentCategory = 'all';
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         let currentView = 'all'; // 'all' or 'favorites'
+        let currentApp = null;
+        
+        // 显示自定义通知
+        function showAlert(message, type = 'success') {
+            const alert = document.getElementById('customAlert');
+            const messageEl = document.getElementById('alertMessage');
+            
+            messageEl.textContent = message;
+            alert.className = `custom-alert alert alert-${type} alert-dismissible fade show`;
+            alert.style.display = 'block';
+            
+            // 5秒后自动隐藏
+            setTimeout(hideAlert, 5000);
+        }
+        
+        // 隐藏自定义通知
+        function hideAlert() {
+            document.getElementById('customAlert').style.display = 'none';
+        }
+        
+        // 复制文本到剪贴板
+        function copyToClipboard(text) {
+            // 使用现代API
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text).then(() => {
+                    showAlert('ئەپ ئادرېسى تاختىغا كۆچۈرۈلدى!');
+                    return true;
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                    return false;
+                });
+            } else {
+                // 使用传统方法
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    if (successful) {
+                        showAlert('ئەپ ئادرېسى تاختىغا كۆچۈرۈلدى!');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (err) {
+                    document.body.removeChild(textArea);
+                    console.error('复制失败:', err);
+                    return false;
+                }
+            }
+        }
         
         // 从JSONBin.io加载数据
         async function loadApps() {
@@ -1037,8 +1310,217 @@
             }
         }
         
-        // 显示应用详情
-        function showAppDetail(appId) {
+        // 显示主页
+        function showHomePage() {
+            document.getElementById('home-page').style.display = 'block';
+            document.getElementById('app-detail-page').style.display = 'none';
+            window.history.pushState({}, '', window.location.pathname);
+        }
+        
+        // 显示应用详情页面
+        function showAppDetailPage(appId) {
+            const app = apps.find(a => a.id === appId);
+            if (!app) return;
+            
+            currentApp = app;
+            
+            // 更新URL
+            window.history.pushState({}, '', `?id=${appId}`);
+            
+            // 隐藏主页，显示详情页
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('app-detail-page').style.display = 'block';
+            
+            // 收集所有图片URL
+            const allImages = [app.imageUrl];
+            if (app.imageUrl2) allImages.push(app.imageUrl2);
+            if (app.imageUrl3) allImages.push(app.imageUrl3);
+            if (app.imageUrl4) allImages.push(app.imageUrl4);
+            if (app.imageUrl5) allImages.push(app.imageUrl5);
+            
+            // 显示或隐藏支付区域
+            if (app.paid) {
+                document.getElementById('appPagePaymentSection').style.display = 'block';
+                document.getElementById('appPageDownloadBtn').style.display = 'none';
+                document.getElementById('appPageQrCodeImage').src = app.qrCodeUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(app.downloadUrl);
+            } else {
+                document.getElementById('appPagePaymentSection').style.display = 'none';
+                document.getElementById('appPageDownloadBtn').style.display = 'block';
+            }
+            
+            // 设置基本信息
+            document.getElementById('appPageName').textContent = app.name;
+            document.getElementById('appPageMainImage').src = app.imageUrl;
+            document.getElementById('appPageDescription').textContent = app.description;
+            document.getElementById('appPageFullDescription').textContent = app.fullDescription || app.description;
+            document.getElementById('appPageSize').textContent = app.size;
+            document.getElementById('appPageVersion').textContent = `نەشرى: ${app.version}`;
+            document.getElementById('appPageRating').innerHTML = `${app.rating} <i class="fas fa-star"></i>`;
+            document.getElementById('appPageDownloads').textContent = `چۈشۈرۈلۈش: ${app.downloadCount || 0}`;
+            
+            // 设置分类
+            const categoryMap = {
+                'tool': 'قورال',
+                'game': 'ئويۇن',
+                'social': 'ئىجتىمائىي',
+                'education': 'ئوقۇتۇش',
+                'other': 'باشقا'
+            };
+            document.getElementById('appPageCategory').textContent = categoryMap[app.category] || app.category;
+            
+            // 显示价格
+            if (app.price) {
+                document.getElementById('appPagePrice').textContent = app.price;
+            } else {
+                document.getElementById('appPagePrice').textContent = '';
+            }
+            
+            // 设置下载按钮
+            document.getElementById('appPageDownloadBtn').onclick = function() {
+                downloadApp(app.id);
+            };
+            
+            // 清除旧的缩略图
+            const thumbnailsContainer = document.getElementById('appPageThumbnails');
+            thumbnailsContainer.innerHTML = '';
+            
+            // 添加主图作为第一个缩略图
+            addPageThumbnail(app.imageUrl, thumbnailsContainer, true);
+            
+            // 添加额外的图片缩略图
+            if (app.imageUrl2) addPageThumbnail(app.imageUrl2, thumbnailsContainer);
+            if (app.imageUrl3) addPageThumbnail(app.imageUrl3, thumbnailsContainer);
+            if (app.imageUrl4) addPageThumbnail(app.imageUrl4, thumbnailsContainer);
+            if (app.imageUrl5) addPageThumbnail(app.imageUrl5, thumbnailsContainer);
+            
+            // 显示版本历史
+            if (app.versions && app.versions.length > 0) {
+                document.getElementById('appPageVersionHistoryList').innerHTML = app.versions.map(version => `
+                    <div class="version-item">
+                        <div class="version-number">${version.version}</div>
+                        <div class="version-date">${version.date}</div>
+                        <div>${version.notes}</div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('appPageVersionHistoryList').innerHTML = '<div class="text-muted">نەشر تارىخى يوق</div>';
+            }
+            
+            // 主图点击放大
+            document.getElementById('appPageMainImage').onclick = function() {
+                showLightbox(allImages, 0);
+            };
+        }
+        
+        // 添加详情页面缩略图
+        function addPageThumbnail(imageUrl, container, isActive = false) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.className = `app-thumbnail ${isActive ? 'active' : ''}`;
+            img.alt = 'ئەپ رەسىمى';
+            
+            img.addEventListener('click', function() {
+                // 更新主图
+                document.getElementById('appPageMainImage').src = imageUrl;
+                
+                // 更新活动缩略图
+                document.querySelectorAll('#appPageThumbnails .app-thumbnail').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+            
+            container.appendChild(img);
+        }
+        
+        // 显示图片灯箱
+        function showLightbox(images, startIndex) {
+            const lightbox = document.createElement('div');
+            lightbox.className = 'lightbox';
+            
+            let currentIndex = startIndex;
+            
+            lightbox.innerHTML = `
+                <div class="lightbox-content">
+                    <button class="lightbox-nav lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+                    <img src="${images[currentIndex]}" alt="ئەپ رەسىمى">
+                    <button class="lightbox-nav lightbox-next"><i class="fas fa-chevron-right"></i></button>
+                    <button class="lightbox-close">&times;</button>
+                    <div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(lightbox);
+            
+            // 添加事件监听器
+            lightbox.querySelector('.lightbox-prev').addEventListener('click', function() {
+                navigateLightbox(-1);
+            });
+            
+            lightbox.querySelector('.lightbox-next').addEventListener('click', function() {
+                navigateLightbox(1);
+            });
+            
+            lightbox.querySelector('.lightbox-close').addEventListener('click', function() {
+                lightbox.remove();
+                document.removeEventListener('keydown', handleKeyDown);
+            });
+            
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.remove();
+                    document.removeEventListener('keydown', handleKeyDown);
+                }
+            });
+            
+            // 添加键盘导航
+            function handleKeyDown(e) {
+                if (e.key === 'ArrowLeft') {
+                    navigateLightbox(-1);
+                } else if (e.key === 'ArrowRight') {
+                    navigateLightbox(1);
+                } else if (e.key === 'Escape') {
+                    lightbox.remove();
+                    document.removeEventListener('keydown', handleKeyDown);
+                }
+            }
+            
+            function navigateLightbox(step) {
+                currentIndex = (currentIndex + step + images.length) % images.length;
+                const img = lightbox.querySelector('img');
+                img.src = images[currentIndex];
+                lightbox.querySelector('.lightbox-counter').textContent = `${currentIndex + 1} / ${images.length}`;
+            }
+            
+            document.addEventListener('keydown', handleKeyDown);
+        }
+        
+        // 分享应用
+        function shareApp() {
+            if (!currentApp) return;
+            
+            const appUrl = `${window.location.origin}${window.location.pathname}?id=${currentApp.id}`;
+            const appName = currentApp.name;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: appName,
+                    text: `بۇ ئەپنى كۆرۈڭ: ${appName}`,
+                    url: appUrl,
+                })
+                .then(() => console.log('مۇۋەپپەقىيەتلىك ئورتاقلىشىلدى'))
+                .catch((error) => {
+                    console.log('ئورتاقلىشىش مەغلۇپ بولدى', error);
+                    copyToClipboard(appUrl);
+                });
+            } else {
+                // 如果不支持Web Share API，则使用复制到剪贴板
+                copyToClipboard(appUrl);
+            }
+        }
+        
+        // 显示应用详情模态框
+        function showAppDetailModal(appId) {
             const app = apps.find(a => a.id === appId);
             if (!app) return;
             
@@ -1048,6 +1530,13 @@
             const isFavorite = favorites.includes(appId);
             const paymentSection = document.getElementById('paymentSection');
             const downloadBtn = document.getElementById('appDetailDownloadBtn');
+            
+            // 收集所有图片URL
+            const allImages = [app.imageUrl];
+            if (app.imageUrl2) allImages.push(app.imageUrl2);
+            if (app.imageUrl3) allImages.push(app.imageUrl3);
+            if (app.imageUrl4) allImages.push(app.imageUrl4);
+            if (app.imageUrl5) allImages.push(app.imageUrl5);
             
             // 显示或隐藏支付区域
             if (app.paid) {
@@ -1068,6 +1557,13 @@
             document.getElementById('appDetailSize').textContent = app.size;
             document.getElementById('appDetailVersion').textContent = app.version;
             document.getElementById('appDetailRating').innerHTML = `${app.rating} <i class="fas fa-star text-warning"></i>`;
+            
+            // 显示价格
+            if (app.price) {
+                document.getElementById('appDetailPrice').textContent = app.price;
+            } else {
+                document.getElementById('appDetailPrice').textContent = '';
+            }
             
             // 设置收藏按钮状态
             const favoriteBtn = document.getElementById('appDetailFavoriteBtn');
@@ -1126,13 +1622,45 @@
                 versionList.innerHTML = '<div class="text-muted">نەشر تارىخى يوق</div>';
             }
             
-            // 主图点击放大
+            // 主图点击放大 - 增强版
             document.getElementById('appDetailMainImage').onclick = function() {
                 const lightbox = document.createElement('div');
                 lightbox.className = 'lightbox';
-                lightbox.innerHTML = `<img src="${this.src}" alt="ئەپ رەسىمى">`;
+                
+                let currentIndex = 0;
+                
+                lightbox.innerHTML = `
+                    <div class="lightbox-content">
+                        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
+                        <img src="${allImages[currentIndex]}" alt="ئەپ رەسىمى">
+                        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)"><i class="fas fa-chevron-right"></i></button>
+                        <button class="lightbox-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                        <div class="lightbox-counter">${currentIndex + 1} / ${allImages.length}</div>
+                    </div>
+                `;
+                
                 document.body.appendChild(lightbox);
-                lightbox.onclick = () => lightbox.remove();
+                
+                // 添加键盘导航
+                document.addEventListener('keydown', handleKeyDown);
+                
+                function handleKeyDown(e) {
+                    if (e.key === 'ArrowLeft') {
+                        navigateLightbox(-1);
+                    } else if (e.key === 'ArrowRight') {
+                        navigateLightbox(1);
+                    } else if (e.key === 'Escape') {
+                        lightbox.remove();
+                        document.removeEventListener('keydown', handleKeyDown);
+                    }
+                }
+                
+                window.navigateLightbox = function(step) {
+                    currentIndex = (currentIndex + step + allImages.length) % allImages.length;
+                    const img = lightbox.querySelector('img');
+                    img.src = allImages[currentIndex];
+                    lightbox.querySelector('.lightbox-counter').textContent = `${currentIndex + 1} / ${allImages.length}`;
+                };
             };
             
             // 显示模态框
@@ -1220,19 +1748,25 @@
                         <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
                             <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
                         </button>
-                        <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetail(${app.id})">
+                        <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetailPage(${app.id})">
                         <div class="app-body">
-                            <h3 class="app-title" onclick="showAppDetail(${app.id})">${app.name}</h3>
+                            <h3 class="app-title" onclick="showAppDetailPage(${app.id})">${app.name}</h3>
                             <p class="app-description">${app.description}</p>
                             <div class="app-meta">
                                 <span>${app.size}</span>
                                 <span>${app.version}</span>
                                 <span>${app.rating} <i class="fas fa-star text-warning"></i></span>
+                                ${app.paid ? `<span class="text-success fw-bold">${app.price || 'ھەقلىق'}</span>` : ''}
                             </div>
                             <button class="download-btn" data-id="${app.id}" ${app.paid ? 'disabled' : ''}>
-                                <i class="fas fa-download me-1"></i> ${app.paid ? 'پۇللۇق ئەپ' : 'چۈشۈرۈش'}
+                                <i class="fas fa-download me-1"></i> ${app.paid ? (app.price || 'پۇللۇق ئەپ') : 'چۈشۈرۈش'}
                             </button>
                         </div>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="?id=${app.id}" class="btn btn-sm btn-outline-primary" onclick="showAppDetailPage(${app.id}); return false;">
+                            <i class="fas fa-external-link-alt me-1"></i> ھۆججەت ئېچىش
+                        </a>
                     </div>
                 </div>
             `).join('');
@@ -1257,7 +1791,7 @@
             
             // 如果是付费应用，显示支付信息
             if (app.paid) {
-                showAppDetail(appId);
+                showAppDetailModal(appId);
                 return;
             }
             
@@ -1331,7 +1865,7 @@
                 appName.textContent = newApps[0].name;
                 link.href = `#app-${newApps[0].id}`;
                 link.onclick = () => {
-                    showAppDetail(newApps[0].id);
+                    showAppDetailModal(newApps[0].id);
                     notification.style.display = 'none';
                     return false;
                 };
@@ -1362,6 +1896,18 @@
             document.getElementById('favorites-link').classList.add('active');
         }
         
+        // 检查URL参数
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const appId = urlParams.get('id');
+            
+            if (appId) {
+                showAppDetailPage(parseInt(appId));
+            } else {
+                showHomePage();
+            }
+        }
+        
         // 初始化
         document.addEventListener('DOMContentLoaded', async function() {
             new WOW().init();
@@ -1369,6 +1915,9 @@
             // 加载应用数据
             await loadApps();
             displayApps();
+            
+            // 检查URL参数
+            checkUrlParams();
             
             // 检查更新
             checkForUpdates();
@@ -1433,19 +1982,25 @@
                             <button class="favorite-btn" data-id="${app.id}" onclick="toggleFavorite(${app.id}); event.stopPropagation();">
                                 <i class="${favorites.includes(app.id) ? 'fas' : 'far'} fa-heart"></i>
                             </button>
-                            <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetail(${app.id})">
+                            <img src="${app.imageUrl}" class="app-image" alt="${app.name}" onclick="showAppDetailPage(${app.id})">
                             <div class="app-body">
-                                <h3 class="app-title" onclick="showAppDetail(${app.id})">${app.name}</h3>
+                                <h3 class="app-title" onclick="showAppDetailPage(${app.id})">${app.name}</h3>
                                 <p class="app-description">${app.description}</p>
                                 <div class="app-meta">
                                     <span>${app.size}</span>
                                     <span>${app.version}</span>
                                     <span>${app.rating} <i class="fas fa-star text-warning"></i></span>
+                                    ${app.paid ? `<span class="text-success fw-bold">${app.price || 'ھەقلىق'}</span>` : ''}
                                 </div>
                                 <button class="download-btn" data-id="${app.id}" ${app.paid ? 'disabled' : ''}>
-                                    <i class="fas fa-download me-1"></i> ${app.paid ? 'پۇللۇق ئەپ' : 'چۈشۈرۈش'}
+                                    <i class="fas fa-download me-1"></i> ${app.paid ? (app.price || 'پۇللۇق ئەپ') : 'چۈشۈرۈش'}
                                 </button>
                             </div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="?id=${app.id}" class="btn btn-sm btn-outline-primary" onclick="showAppDetailPage(${app.id}); return false;">
+                                <i class="fas fa-external-link-alt me-1"></i> ھۆججەت ئېچىش
+                            </a>
                         </div>
                     </div>
                 `).join('');
@@ -1469,7 +2024,7 @@
             // 应用请求表单
             document.getElementById('requestAppForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert('ئىلتىماسىڭىز قوبۇل قىلىندى! راھمەت!');
+                showAlert('ئىلتىماسىڭىز قوبۇل قىلىندى! راھمەت!');
                 this.reset();
             });
             
@@ -1498,7 +2053,7 @@
                     });
                     
                     if (response.ok) {
-                        alert('رەھمەت! ئىنكاسىڭىز قوبۇل قىلىندى.');
+                        showAlert('رەھمەت! ئىنكاسىڭىز قوبۇل قىلىندى.');
                         $('#feedbackModal').modal('hide');
                         this.reset();
                     } else {
@@ -1506,7 +2061,7 @@
                     }
                 } catch (error) {
                     console.error('Feedback error:', error);
-                    alert('ئىنكاس يوللاش مەغلۇپ بولدى، قايتا سىناڭ!');
+                    showAlert('ئىنكاس يوللاش مەغلۇپ بولدى، قايتا سىناڭ!', 'danger');
                 }
             });
             
@@ -1516,8 +2071,12 @@
             });
             
             // 添加全局函数
-            window.showAppDetail = showAppDetail;
+            window.showAppDetailModal = showAppDetailModal;
+            window.showAppDetailPage = showAppDetailPage;
             window.toggleFavorite = toggleFavorite;
+            window.showHomePage = showHomePage;
+            window.shareApp = shareApp;
+            window.hideAlert = hideAlert;
         });
     </script>
 </body>
